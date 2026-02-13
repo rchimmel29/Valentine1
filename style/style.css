@@ -4,7 +4,16 @@ html {
 
 body {
   margin: 0;
-  font-family: "Work Sans", sans-serif;
+  font-family: "Sigmar One", "Momo Trust Sans", sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: url('../img/lovewhite.jpg') no-repeat center center/cover;
+  overflow: hidden;
+  position: relative;
+  transition: 1s ease;
+  image-rendering: crisp-edges; /* Enhance image sharpness */
 }
 
 .container {
@@ -114,9 +123,84 @@ body {
 
 .six {
   position: relative;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.six .images-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  width: 90vw;
+  max-width: 650px;
+  height: 850px;
+  margin: 0 auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.six .images-container::-webkit-scrollbar {
+  width: 0px;
+}
+
+.six .images-container:hover {
+  scrollbar-width: auto;
+}
+
+.six .images-container:hover::-webkit-scrollbar {
+  width: 8px;
+}
+
+.six .images-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.six .images-container::-webkit-scrollbar-thumb {
+  background: #ff69b4;
+  border-radius: 10px;
+}
+
+.six .images-container::-webkit-scrollbar-thumb:hover {
+  background: #ff1493;
+}
+
+.six .images-container img {
+  flex-shrink: 0;
+  width: 100%;
+  height: 250px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+
+.six-card {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 20vh;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.six-card.active {
+  visibility: visible;
 }
 
 .six img {
+  display: inline-block;
+  max-width: 45%;
+  height: auto;
+}
+
+.six-card img {
   display: inline-block;
   max-width: 45%;
   height: auto;
@@ -214,7 +298,8 @@ body {
 .wish-hbd {
   font-size: 3em;
   margin: 0;
-  /* text-transform: uppercase; */
+  text-align: center;
+  color: #ff69b4;
 }
 
 .wish h5 {
@@ -232,7 +317,27 @@ body {
   z-index: 3;
   cursor: pointer;
 }
+/* Floating hearts styling */
+.heart {
+    position: absolute;
+    bottom: -20px;
+    font-size: 20px;
+    pointer-events: none; /* Để không cản trở việc click nút */
+    animation: floatUp linear infinite;
+    opacity: 0.8;
+    z-index: 999; /* Đảm bảo trái tim bay trên các lớp nền */
+}
 
+@keyframes floatUp {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+    }
+    to {
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+    }
+}
 /* Media Queries */
 @media screen and (max-height: 1000px) {
   .six .hat {

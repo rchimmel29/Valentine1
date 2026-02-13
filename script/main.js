@@ -1,305 +1,247 @@
 // Animation Timeline
 const animationTimeline = () => {
-  // Spit chars that needs to be animated individually
-  const textBoxChars = document.getElementsByClassName("hbd-chatbox")[0];
-  const hbd = document.getElementsByClassName("wish-hbd")[0];
+    // Set background music volume to medium (0.5 = 50%)
+    const bgMusic = document.getElementById("backgroundMusic");
+    if (bgMusic) {
+        bgMusic.volume = 0.5;
+    }
 
-  textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
-    .split("")
-    .join("</span><span>")}</span`;
+    // 1. Tạo hiệu ứng trái tim bay (Background Hearts)
+    const heartIcons = ["❤️", "💖", "💝", "💕", "💗", "💓"];
+    
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        // Lấy ngẫu nhiên một loại trái tim từ mảng
+        heart.innerHTML = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+        
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (1 + Math.random() * 9) + "s"; // 1s - 10s
+        heart.style.opacity = (0.6 + Math.random() * 0.4); // Độ trong suốt ngẫu nhiên từ 0.6 đến 1
 
-  hbd.innerHTML = `<span>${hbd.innerHTML
-    .split("")
-    .join("</span><span>")}</span`;
+        // Thay đổi kích thước ngẫu nhiên từ 15px đến 80px
+        const randomSize = 15 + Math.random() * 65;
+        heart.style.fontSize = randomSize + "px";
 
-  const ideaTextTrans = {
-    opacity: 0,
-    y: -20,
-    rotationX: 5,
-    skewX: "15deg",
-  };
+        document.body.appendChild(heart);
+        
+        // Xóa sau khi hoàn thành để tránh nặng web
+        setTimeout(() => {
+            heart.remove();
+        }, 10000);
+    }
 
-  const ideaTextTransLeave = {
-    opacity: 0,
-    y: 20,
-    rotationY: 5,
-    skewX: "-15deg",
-  };
+    // Khởi chạy tim bay liên tục mỗi 150ms
+    let heartInterval = setInterval(createHeart, 150);
 
-  const tl = new TimelineMax();
+    // 2. Xử lý tách chữ cho animation (Logic cũ)
+    const textBoxChars = document.getElementsByClassName("hbd-chatbox")[0];
+    const hbd = document.getElementsByClassName("wish-hbd")[0];
 
-  tl.to(".container", 0.1, {
-    visibility: "visible",
-  })
+    textBoxChars.innerHTML = `<span>${textBoxChars.innerHTML
+        .split("")
+        .join("</span><span>")}</span`;
+
+    hbd.innerHTML = `<span>${hbd.innerHTML
+        .split("")
+        .join("</span><span>")}</span`;
+
+    const ideaTextTrans = {
+        opacity: 0,
+        y: -20,
+        rotationX: 5,
+        skewX: "15deg",
+    };
+
+    const ideaTextTransLeave = {
+        opacity: 0,
+        y: 20,
+        rotationY: 5,
+        skewX: "-15deg",
+    };
+
+    // 3. Khởi tạo GSAP Timeline
+    const tl = new TimelineMax();
+
+    tl.to(".container", 0.1, {
+        visibility: "visible",
+    })
     .from(".one", 0.7, {
-      opacity: 0,
-      y: 10,
+        opacity: 0,
+        y: 10,
     })
     .from(".two", 0.4, {
-      opacity: 0,
-      y: 10,
+        opacity: 0,
+        y: 10,
     })
-    .to(
-      ".one",
-      0.7,
-      {
+    .to(".one", 0.7, {
         opacity: 0,
         y: 10,
-      },
-      "+=2.5"
-    )
-    .to(
-      ".two",
-      0.7,
-      {
+    }, "+=2.5")
+    .to(".two", 0.7, {
         opacity: 0,
         y: 10,
-      },
-      "-=1"
-    )
+    }, "-=1")
     .from(".three", 0.7, {
-      opacity: 0,
-      y: 10,
-      // scale: 0.7
-    })
-    .to(
-      ".three",
-      0.7,
-      {
         opacity: 0,
         y: 10,
-      },
-      "+=2"
-    )
+    })
+    .to(".three", 0.7, {
+        opacity: 0,
+        y: 10,
+    }, "+=2")
     .from(".four", 0.7, {
-      scale: 0.2,
-      opacity: 0,
+        scale: 0.2,
+        opacity: 0,
     })
     .from(".fake-btn", 0.3, {
-      scale: 0.2,
-      opacity: 0,
+        scale: 0.2,
+        opacity: 0,
     })
-    .staggerTo(
-      ".hbd-chatbox span",
-      0.5,
-      {
+    .staggerTo(".hbd-chatbox span", 0.5, {
         visibility: "visible",
-      },
-      0.05
-    )
+    }, 0.05)
     .to(".fake-btn", 0.1, {
-      backgroundColor: "rgb(127, 206, 248)",
+        backgroundColor: "rgb(127, 206, 248)",
     })
-    .to(
-      ".four",
-      0.5,
-      {
+    .to(".four", 0.5, {
         scale: 0.2,
         opacity: 0,
         y: -150,
-      },
-      "+=0.7"
-    )
+    }, "+=0.7")
     .from(".idea-1", 0.7, ideaTextTrans)
     .to(".idea-1", 0.7, ideaTextTransLeave, "+=1.5")
     .from(".idea-2", 0.7, ideaTextTrans)
     .to(".idea-2", 0.7, ideaTextTransLeave, "+=1.5")
     .from(".idea-3", 0.7, ideaTextTrans)
     .to(".idea-3 strong", 0.5, {
-      scale: 1.2,
-      x: 10,
-      backgroundColor: "rgb(21, 161, 237)",
-      color: "#fff",
+        scale: 1.2,
+        x: 10,
+        backgroundColor: "rgb(21, 161, 237)",
+        color: "#fff",
     })
     .to(".idea-3", 0.7, ideaTextTransLeave, "+=1.5")
     .from(".idea-4", 0.7, ideaTextTrans)
     .to(".idea-4", 0.7, ideaTextTransLeave, "+=1.5")
-    .from(
-      ".idea-5",
-      0.7,
-      {
+    .from(".idea-5", 0.7, {
         rotationX: 15,
         rotationZ: -10,
         skewY: "-5deg",
         y: 50,
         z: 10,
         opacity: 0,
-      },
-      "+=0.5"
-    )
-    .to(
-      ".idea-5 span",
-      0.7,
-      {
+    }, "+=0.5")
+    .to(".idea-5 span", 0.7, {
         rotation: 90,
         x: 8,
-      },
-      "+=0.4"
-    )
-    .to(
-      ".idea-5",
-      0.7,
-      {
+    }, "+=0.4")
+    .to(".idea-5", 0.7, {
         scale: 0.2,
         opacity: 0,
-      },
-      "+=2"
-    )
-    .staggerFrom(
-      ".idea-6 span",
-      0.8,
-      {
+    }, "+=2")
+    .staggerFrom(".idea-6 span", 0.8, {
         scale: 3,
         opacity: 0,
         rotation: 15,
         ease: Expo.easeOut,
-      },
-      0.2
-    )
-    .staggerTo(
-      ".idea-6 span",
-      0.8,
-      {
+    }, 0.2)
+    .staggerTo(".idea-6 span", 0.8, {
         scale: 3,
         opacity: 0,
         rotation: -15,
         ease: Expo.easeOut,
-      },
-      0.2,
-      "+=1"
-    )
-    .staggerFromTo(
-      ".baloons img",
-      2.5,
-      {
+    }, 0.2, "+=1")
+    .staggerFromTo(".baloons img", 2.5, {
         opacity: 0.9,
         y: 1400,
-      },
-      {
+    }, {
         opacity: 1,
         y: -1000,
-      },
-      0.2
-    )
-    .from(
-      ".girl-dp",
-      0.5,
-      {
+    }, 0.2)
+    .from(".images-container img", 0.5, {
         scale: 3.5,
         opacity: 0,
         x: 25,
         y: -25,
         rotationZ: -45,
-      },
-      "-=2"
-    )
-    .from(".hat", 0.5, {
-      x: -100,
-      y: 350,
-      rotation: -180,
-      opacity: 0,
-    })
-    .staggerFrom(
-      ".wish-hbd span",
-      0.7,
-      {
+    }, "-=2")
+    .staggerFrom(".wish-hbd span", 0.7, {
         opacity: 0,
         y: -50,
-        // scale: 0.3,
         rotation: 150,
         skewX: "30deg",
         ease: Elastic.easeOut.config(1, 0.5),
-      },
-      0.1
-    )
-    .staggerFromTo(
-      ".wish-hbd span",
-      0.7,
-      {
+    }, 0.1)
+    .staggerFromTo(".wish-hbd span", 0.7, {
         scale: 1.4,
         rotationY: 150,
-      },
-      {
+    }, {
         scale: 1,
         rotationY: 0,
         color: "#ff69b4",
         ease: Expo.easeOut,
-      },
-      0.1,
-      "party"
-    )
-    .from(
-      ".wish h5",
-      0.5,
-      {
+    }, 0.1, "party")
+    .from(".wish h5", 0.5, {
         opacity: 0,
         y: 10,
         skewX: "-15deg",
-      },
-      "party"
-    )
-    .staggerTo(
-      ".eight svg",
-      1.5,
-      {
+    }, "party")
+    .staggerTo(".eight svg", 1.5, {
         visibility: "visible",
         opacity: 0,
         scale: 80,
         repeat: 3,
         repeatDelay: 1.4,
-      },
-      0.3
-    )
+    }, 0.3)
     .to(".six", 0.5, {
-      opacity: 0,
-      y: 30,
-      zIndex: "-1",
+        opacity: 0,
+        y: 30,
+        zIndex: "-1",
     })
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
-    .to(
-      ".last-smile",
-      0.5,
-      {
+    .to(".last-smile", 0.5, {
         rotation: 90,
-      },
-      "+=1"
-    );
+    }, "+=1");
 
-  // tl.seek("currentStep");
-  // tl.timeScale(2);
+    // Restart Animation
+    const replyBtn = document.getElementById("replay");
+    replyBtn.addEventListener("click", () => {
+        // Xóa các trái tim cũ đang bay
+        document.querySelectorAll('.heart').forEach(h => h.remove());
+        tl.restart();
+    });
+};
+const music = document.getElementById("backgroundMusic");
 
-  // Restart Animation on click
-  const replyBtn = document.getElementById("replay");
-  replyBtn.addEventListener("click", () => {
-    tl.restart();
-  });
+const startHeartAndMusic = () => {
+    // 1. Cài đặt thời gian bắt đầu là giây thứ 30
+    music.currentTime = 12; 
+    
+    // 2. Phát nhạc
+    music.play().catch(e => console.log("Trình duyệt chặn phát tự động"));
+
+    // 3. Chạy các hiệu ứng chữ và tim bay
+    animationTimeline();
+
+    // 4. Xóa sự kiện click sau khi đã chạy để không bị lặp lại khi nhấn chỗ khác
+    window.removeEventListener("click", startHeartAndMusic);
 };
 
-// Import the data to customize and insert them into page
-const fetchData = () => {
-  fetch("customize.json")
-    .then((data) => data.json())
-    .then((data) => {
-      Object.keys(data).map((customData) => {
-        if (data[customData] !== "") {
-          if (customData === "imagePath") {
-            document
-              .getElementById(customData)
-              .setAttribute("src", data[customData]);
-          } else {
-            document.getElementById(customData).innerText = data[customData];
-          }
-        }
-      });
+// Lắng nghe cú click đầu tiên vào bất kỳ đâu trên màn hình để bắt đầu
+window.addEventListener("click", startHeartAndMusic);
+
+// Giữ lại phần lấy dữ liệu từ JSON
+fetchData();
+
+// Data handling
+const resolveFetch = () => {
+    return new Promise((resolve) => {
+        // Set the special message after a short delay to ensure DOM is ready
+        setTimeout(() => {
+            animationTimeline();
+            resolve("Fetch done!");
+        }, 100);
     });
 };
 
-// Run fetch and animation in sequence
-const resolveFetch = () => {
-  return new Promise((resolve, reject) => {
-    fetchData();
-    resolve("Fetch done!");
-  });
-};
-
-resolveFetch().then(animationTimeline());
+resolveFetch();
