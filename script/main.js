@@ -32,7 +32,7 @@ const animationTimeline = () => {
     }
 
     // Khởi chạy tim bay liên tục mỗi 150ms
-    let heartInterval = setInterval(createHeart, 150);
+    let heartInterval = setInterval(createHeart, 300);
 
     // 2. Xử lý tách chữ cho animation (Logic cũ)
     const textBoxChars = document.getElementsByClassName("hbd-chatbox")[0];
